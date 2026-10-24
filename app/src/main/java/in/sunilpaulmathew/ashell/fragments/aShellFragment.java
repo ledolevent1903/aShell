@@ -71,6 +71,7 @@ public class aShellFragment extends BaseFragment {
 
     private AppCompatImageButton mBookMark;
     private MaterialButton mBookMarksButton, mBottomArrow, mClearButton, mHistoryButton, mSaveButton, mSearchButton, mSendButton, mTopArrow;
+    private MaterialButton mBtnWifiEnable, mBtnWifiDisable, mBtnWifiGlobal, mBtnWifiScan;
     private TextInputEditText mCommand, mSearchWord;
     private RecyclerView mRecyclerViewOutput;
     private ScheduledExecutorService mExecutor = null;
@@ -108,6 +109,34 @@ public class aShellFragment extends BaseFragment {
         mBookMarksButton = mRootView.findViewById(R.id.bookmarks);
         mSendButton = mRootView.findViewById(R.id.send);
         mTopArrow = mRootView.findViewById(R.id.top);
+
+        // --- Wi-Fi & Global Ayar Butonları ---
+        mBtnWifiEnable = mRootView.findViewById(R.id.btn_wifi_enable);
+        mBtnWifiDisable = mRootView.findViewById(R.id.btn_wifi_disable);
+        mBtnWifiGlobal = mRootView.findViewById(R.id.btn_wifi_global);
+        mBtnWifiScan = mRootView.findViewById(R.id.btn_wifi_scan);
+
+        mBtnWifiEnable.setOnClickListener(v -> {
+            mCommand.setText("svc wifi enable");
+            runShellCommand("svc wifi enable");
+        });
+
+        mBtnWifiDisable.setOnClickListener(v -> {
+            mCommand.setText("svc wifi disable");
+            runShellCommand("svc wifi disable");
+        });
+
+        mBtnWifiGlobal.setOnClickListener(v -> {
+            mCommand.setText("settings put global wifi_on 1");
+            runShellCommand("settings put global wifi_on 1");
+        });
+
+        mBtnWifiScan.setOnClickListener(v -> {
+            mCommand.setText("settings put global wifi_scan_always_enabled 1");
+            runShellCommand("settings put global wifi_scan_always_enabled 1");
+        });
+        // ------------------------------------
+
         RecyclerView mRecyclerViewCommands = mRootView.findViewById(R.id.recycler_view_commands);
         mRecyclerViewOutput = mRootView.findViewById(R.id.recycler_view_output);
 
@@ -258,11 +287,6 @@ public class aShellFragment extends BaseFragment {
                 if (query.isEmpty()) {
                     updateUI(mResult);
                 } else {
-                    /*
-                     * Plain ArrayList: this is built and read on the main thread only.
-                     * Copy-on-write duplicated the whole array per match, which turned
-                     * one keystroke into quadratic work over the entire output.
-                     */
                     List<String> mResultSorted = new ArrayList<>();
                     for (int i = mPosition; i < mResult.size(); i++) {
                         String mLine = mResult.get(i);
@@ -324,10 +348,6 @@ public class aShellFragment extends BaseFragment {
                     return;
                 }
 
-                /*
-                 * Joining the output and writing it out both happen off the main thread:
-                 * this walks up to the whole backlog and then does a file write.
-                 */
                 new Async() {
                     private final ContentResolver mResolver = requireActivity().getContentResolver();
                     @Override
@@ -525,9 +545,7 @@ public class aShellFragment extends BaseFragment {
         mBookMark.setOnClickListener(v -> bookMark(command));
     }
 
-    // Listing the bookmarks directory is disk work; flip the button once it answers
     private void updateBookmarksButton() {
-
         new Async() {
             private final Activity activity = requireActivity();
             private boolean mHasBookmarks;
@@ -759,12 +777,6 @@ public class aShellFragment extends BaseFragment {
         }
     }
 
-    /*
-     * A command like logcat appends until it is stopped. Without a ceiling the list
-     * grows until the app is killed for running out of memory, so drop the oldest
-     * lines in chunks once it gets too long. mPosition indexes into the same list,
-     * so it has to move down by whatever was dropped.
-     */
     private void trimOutput() {
         if (mResult.size() <= MAX_OUTPUT_LINES + TRIM_CHUNK) return;
 
@@ -811,7 +823,6 @@ public class aShellFragment extends BaseFragment {
         super.onDestroy();
 
         if (mShizukuShell != null) mShizukuShell.destroy();
-
     }
 
     @Override

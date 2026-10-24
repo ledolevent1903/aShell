@@ -71,7 +71,7 @@ public class aShellFragment extends BaseFragment {
 
     private AppCompatImageButton mBookMark;
     private MaterialButton mBookMarksButton, mBottomArrow, mClearButton, mHistoryButton, mSaveButton, mSearchButton, mSendButton, mTopArrow;
-    private MaterialButton mBtnWifiEnable, mBtnWifiDisable, mBtnWifiGlobal, mBtnWifiScan;
+    private MaterialButton mBtnWifiEnable, mBtnWifiDisable, mBtnWifiGlobal, mBtnWifiSavedState, mBtnWifiScan, mBtnWifiSleepPolicy;
     private TextInputEditText mCommand, mSearchWord;
     private RecyclerView mRecyclerViewOutput;
     private ScheduledExecutorService mExecutor = null;
@@ -110,32 +110,50 @@ public class aShellFragment extends BaseFragment {
         mSendButton = mRootView.findViewById(R.id.send);
         mTopArrow = mRootView.findViewById(R.id.top);
 
-        // --- Wi-Fi & Global Ayar Butonları ---
+        // --- 6 ADET WI-FI & GLOBAL AYAR BUTONLARI ---
         mBtnWifiEnable = mRootView.findViewById(R.id.btn_wifi_enable);
         mBtnWifiDisable = mRootView.findViewById(R.id.btn_wifi_disable);
         mBtnWifiGlobal = mRootView.findViewById(R.id.btn_wifi_global);
+        mBtnWifiSavedState = mRootView.findViewById(R.id.btn_wifi_saved_state);
         mBtnWifiScan = mRootView.findViewById(R.id.btn_wifi_scan);
+        mBtnWifiSleepPolicy = mRootView.findViewById(R.id.btn_wifi_sleep_policy);
 
+        // 1. Wi-Fi Aç
         mBtnWifiEnable.setOnClickListener(v -> {
             mCommand.setText("svc wifi enable");
             runShellCommand("svc wifi enable");
         });
 
+        // 2. Wi-Fi Kapat
         mBtnWifiDisable.setOnClickListener(v -> {
             mCommand.setText("svc wifi disable");
             runShellCommand("svc wifi disable");
         });
 
+        // 3. Global wifi_on 1
         mBtnWifiGlobal.setOnClickListener(v -> {
             mCommand.setText("settings put global wifi_on 1");
             runShellCommand("settings put global wifi_on 1");
         });
 
+        // 4. Saved State 1
+        mBtnWifiSavedState.setOnClickListener(v -> {
+            mCommand.setText("settings put global wifi_saved_state 1");
+            runShellCommand("settings put global wifi_saved_state 1");
+        });
+
+        // 5. Sürekli Tarama
         mBtnWifiScan.setOnClickListener(v -> {
             mCommand.setText("settings put global wifi_scan_always_enabled 1");
             runShellCommand("settings put global wifi_scan_always_enabled 1");
         });
-        // ------------------------------------
+
+        // 6. Uyku Politikası 2
+        mBtnWifiSleepPolicy.setOnClickListener(v -> {
+            mCommand.setText("settings put global wifi_sleep_policy 2");
+            runShellCommand("settings put global wifi_sleep_policy 2");
+        });
+        // ----------------------------------------------
 
         RecyclerView mRecyclerViewCommands = mRootView.findViewById(R.id.recycler_view_commands);
         mRecyclerViewOutput = mRootView.findViewById(R.id.recycler_view_output);

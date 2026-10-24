@@ -138,7 +138,7 @@
                 app:icon="@drawable/ic_help" />
         </FrameLayout>
 
-        <!-- HIZLI WI-FI VE GLOBAL AYAR BUTONLARI -->
+        <!-- 6 ADET HIZLI WI-FI VE GLOBAL AYAR BUTONU -->
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/layout_wifi_quick_buttons"
             android:layout_width="match_parent"
@@ -173,7 +173,7 @@
                     android:text="Wi-Fi Kapat" />
             </androidx.appcompat.widget.LinearLayoutCompat>
 
-            <!-- 2. Satır: Global Aç & Tarama Aç -->
+            <!-- 2. Satır: Global Aç & Saved State 1 -->
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -190,13 +190,39 @@
                     android:text="Global Aç" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_wifi_scan"
+                    android:id="@+id/btn_wifi_saved_state"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginStart="4dp"
                     android:textSize="12sp"
-                    android:text="Tarama Aç" />
+                    android:text="Saved State 1" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <!-- 3. Satır: Sürekli Tarama & Uyku Politikası 2 -->
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_wifi_scan"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="4dp"
+                    android:textSize="12sp"
+                    android:text="Sürekli Tarama" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_wifi_sleep_policy"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="4dp"
+                    android:textSize="12sp"
+                    android:text="Uyku Politikası 2" />
             </androidx.appcompat.widget.LinearLayoutCompat>
         </androidx.appcompat.widget.LinearLayoutCompat>
 

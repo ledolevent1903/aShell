@@ -1,0 +1,41 @@
+name: aShell Klasik APK Derle
+
+on:
+  push:
+    branches: [ "master", "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Kodu Cek
+        uses: actions/checkout@v4
+
+      - name: Java 17 Kur
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Gradle Calistirma Yetkisi Ver
+        run: chmod +x gradlew
+
+      - name: APK Derle
+        run: ./gradlew assembleDebug --no-daemon
+
+      - name: Tek APKyi Ayikla
+        run: |
+          mkdir -p cikti
+          # Olusan debug APK'sini bul ve tasi
+          APK_DOSYASI=$(find app/build/outputs/apk -name "*.apk" | head -n 1)
+          echo "Bulunan APK: $APK_DOSYASI"
+          cp "$APK_DOSYASI" cikti/aShell-Chery-WifiButonlu.apk
+          ls -lh cikti/
+
+      - name: APKyi Yukle
+        uses: actions/upload-artifact@v4
+        with:
+          name: aShell-Chery-WifiButonlu
+          path: cikti/aShell-Chery-WifiButonlu.apk
